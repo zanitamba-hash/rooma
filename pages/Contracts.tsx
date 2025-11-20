@@ -1,7 +1,11 @@
+
 import React from 'react';
 import { FileText, Download, PenTool, ShieldCheck, AlertCircle, CheckCircle2, Scale, Lock, BookOpen, Stamp } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const Contracts: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-slate-50 py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -10,41 +14,41 @@ const Contracts: React.FC = () => {
           <div className="inline-block p-3 bg-blue-100 text-blue-600 rounded-full mb-4">
              <Scale size={32} />
           </div>
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">Contrat de Bail & Légalisation</h1>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4">{t('contracts.title')}</h1>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Le contrat de bail n'est pas une option, c'est votre protection juridique absolue au Maroc. Room.ma vous guide pour le signer et le légaliser en toute conformité.
+            {t('contracts.subtitle')}
           </p>
         </div>
 
         {/* NOUVELLE SECTION IMPORTANCE */}
         <div className="mb-20">
-            <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">Pourquoi le contrat est-il <span className="text-red-600">indispensable</span> ?</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">{t('contracts.why_title')}</h2>
             <div className="grid md:grid-cols-3 gap-8">
                 <div className="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-blue-600 hover:shadow-md transition">
                     <div className="bg-blue-50 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                         <FileText size={28} className="text-blue-600"/>
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-3">1. Carte de Séjour</h3>
+                    <h3 className="text-xl font-bold text-slate-900 mb-3">{t('contracts.reason_1_title')}</h3>
                     <p className="text-slate-600 leading-relaxed">
-                        Pour les étudiants étrangers, le contrat de bail légalisé est <strong>obligatoire</strong> pour obtenir votre Certificat de Résidence, document clé pour votre demande ou renouvellement de Carte de Séjour au Maroc.
+                        {t('contracts.reason_1_desc')}
                     </p>
                 </div>
                 <div className="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-green-600 hover:shadow-md transition">
                     <div className="bg-green-50 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                         <Lock size={28} className="text-green-600"/>
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-3">2. Protection Caution</h3>
+                    <h3 className="text-xl font-bold text-slate-900 mb-3">{t('contracts.reason_2_title')}</h3>
                     <p className="text-slate-600 leading-relaxed">
-                        Sans contrat écrit mentionnant le montant de la caution, vous n'avez aucune preuve légale pour réclamer votre argent à la fin du séjour. Le contrat Room.ma sécurise votre dépôt.
+                        {t('contracts.reason_2_desc')}
                     </p>
                 </div>
                 <div className="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-purple-600 hover:shadow-md transition">
                     <div className="bg-purple-50 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                         <BookOpen size={28} className="text-purple-600"/>
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-3">3. Loi 67-12</h3>
+                    <h3 className="text-xl font-bold text-slate-900 mb-3">{t('contracts.reason_3_title')}</h3>
                     <p className="text-slate-600 leading-relaxed">
-                        Au Maroc, la loi 67-12 régit les rapports locatifs. Un contrat conforme vous protège contre les augmentations de loyer abusives et les expulsions sans préavis.
+                        {t('contracts.reason_3_desc')}
                     </p>
                 </div>
             </div>
@@ -53,37 +57,37 @@ const Contracts: React.FC = () => {
         {/* Steps */}
         <div className="bg-slate-900 text-white rounded-3xl p-8 md:p-12 mb-16 relative overflow-hidden">
            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600 rounded-full blur-3xl opacity-20 -mr-20 -mt-20"></div>
-           <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center relative z-10">La Procédure de Légalisation</h2>
+           <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center relative z-10">{t('contracts.procedure_title')}</h2>
            
            <div className="grid md:grid-cols-3 gap-8 relative z-10">
                 <div className="flex flex-col items-center text-center">
                     <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center border border-slate-700 mb-6 font-bold text-2xl shadow-lg shadow-blue-900/20">1</div>
-                    <h3 className="text-xl font-bold mb-2">Télécharger & Imprimer</h3>
-                    <p className="text-slate-400 text-sm">Générez le contrat pré-rempli sur Room.ma et imprimez-le en 3 exemplaires.</p>
+                    <h3 className="text-xl font-bold mb-2">{t('contracts.step_1')}</h3>
+                    <p className="text-slate-400 text-sm">{t('contracts.step_1_desc')}</p>
                 </div>
                 <div className="flex flex-col items-center text-center">
                     <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center border border-slate-700 mb-6 font-bold text-2xl shadow-lg shadow-blue-900/20">2</div>
-                    <h3 className="text-xl font-bold mb-2">Signer à la Mouqata'a</h3>
-                    <p className="text-slate-400 text-sm">Le propriétaire et l'étudiant doivent se rendre ensemble à l'annexe administrative pour signer devant l'officier.</p>
+                    <h3 className="text-xl font-bold mb-2">{t('contracts.step_2')}</h3>
+                    <p className="text-slate-400 text-sm">{t('contracts.step_2_desc')}</p>
                 </div>
                 <div className="flex flex-col items-center text-center">
                     <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center border border-slate-700 mb-6 font-bold text-2xl shadow-lg shadow-blue-900/20">3</div>
-                    <h3 className="text-xl font-bold mb-2">Timbre & Enregistrement</h3>
-                    <p className="text-slate-400 text-sm">Payez les frais de timbre (approx. 20 DH) pour officialiser la "Légalisation de signature".</p>
+                    <h3 className="text-xl font-bold mb-2">{t('contracts.step_3')}</h3>
+                    <p className="text-slate-400 text-sm">{t('contracts.step_3_desc')}</p>
                 </div>
            </div>
         </div>
 
         {/* Downloads */}
         <div className="mb-16">
-            <h2 className="text-2xl font-bold text-slate-900 mb-6">Modèles de Contrats Certifiés</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">{t('contracts.models_title')}</h2>
             <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between hover:border-blue-400 transition group">
                     <div className="flex items-center gap-4">
                         <div className="bg-blue-50 p-3 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition"><FileText size={28}/></div>
                         <div>
-                            <h4 className="font-bold text-lg text-slate-900">Contrat Meublé (Standard)</h4>
-                            <p className="text-sm text-slate-500">Idéal pour studio ou appartement équipé.</p>
+                            <h4 className="font-bold text-lg text-slate-900">{t('contracts.model_furnished')}</h4>
+                            <p className="text-sm text-slate-500">PDF</p>
                         </div>
                     </div>
                     <button className="p-3 bg-slate-100 rounded-lg hover:bg-blue-600 hover:text-white transition"><Download size={20}/></button>
@@ -93,8 +97,8 @@ const Contracts: React.FC = () => {
                     <div className="flex items-center gap-4">
                         <div className="bg-purple-50 p-3 rounded-lg text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition"><FileText size={28}/></div>
                         <div>
-                            <h4 className="font-bold text-lg text-slate-900">Contrat Colocation</h4>
-                            <p className="text-sm text-slate-500">Avec clause de solidarité expliquée.</p>
+                            <h4 className="font-bold text-lg text-slate-900">{t('contracts.model_coloc')}</h4>
+                            <p className="text-sm text-slate-500">PDF</p>
                         </div>
                     </div>
                     <button className="p-3 bg-slate-100 rounded-lg hover:bg-purple-600 hover:text-white transition"><Download size={20}/></button>
@@ -104,7 +108,7 @@ const Contracts: React.FC = () => {
 
         {/* FAQ */}
         <div className="bg-white rounded-2xl border border-slate-200 p-8">
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2"><AlertCircle className="text-orange-500"/> Questions Fréquentes</h2>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2"><AlertCircle className="text-orange-500"/> {t('contracts.faq_title')}</h2>
             <div className="space-y-4">
                 <details className="group bg-slate-50 rounded-lg open:bg-white open:shadow-sm transition-all duration-300">
                     <summary className="flex justify-between items-center font-medium cursor-pointer list-none p-4">

@@ -1,8 +1,11 @@
+
 import React, { useState } from 'react';
 import { Upload, Check, Shield, Sparkles, Info, AlertCircle, Bot, Send, Key, Camera, DollarSign, FileCheck, Zap, CheckSquare, PenTool } from 'lucide-react';
 import { UNIVERSITIES } from '../constants';
+import { useLanguage } from '../context/LanguageContext';
 
 const AddListing: React.FC = () => {
+  const { t } = useLanguage();
   const [submitted, setSubmitted] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   
@@ -85,8 +88,8 @@ const AddListing: React.FC = () => {
         <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6 animate-bounce">
           <Check size={40} />
         </div>
-        <h2 className="text-3xl font-bold text-slate-900">Annonce Reçue !</h2>
-        <p className="text-slate-600 mt-4">Vérification en cours par notre équipe IA. Publication sous 24h.</p>
+        <h2 className="text-3xl font-bold text-slate-900">{t('add_listing.success_title')}</h2>
+        <p className="text-slate-600 mt-4">{t('add_listing.success_desc')}</p>
       </div>
     );
   }
@@ -96,8 +99,8 @@ const AddListing: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-2"><Key className="text-blue-600"/> Espace Propriétaire</h1>
-            <p className="text-slate-600 mt-2">Publiez votre bien en 2 minutes. L'IA vous assiste à chaque étape.</p>
+            <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-2"><Key className="text-blue-600"/> {t('add_listing.title')}</h1>
+            <p className="text-slate-600 mt-2">{t('add_listing.subtitle')}</p>
           </div>
         </div>
 
@@ -107,18 +110,18 @@ const AddListing: React.FC = () => {
                 <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-8">
                     <div className="bg-slate-900 p-5 text-white flex items-center justify-between">
                         <div>
-                            <span className="font-bold flex items-center gap-2 text-lg"><Upload size={20}/> Nouvelle Annonce</span>
-                            <p className="text-xs text-slate-400 mt-1">Remplissez les détails ci-dessous</p>
+                            <span className="font-bold flex items-center gap-2 text-lg"><Upload size={20}/> {t('add_listing.new_listing')}</span>
+                            <p className="text-xs text-slate-400 mt-1">{t('add_listing.fill_details')}</p>
                         </div>
-                        <span className="text-xs bg-blue-600 px-3 py-1.5 rounded-full flex items-center gap-1 font-semibold shadow-md"><Shield size={12}/> Identité requise</span>
+                        <span className="text-xs bg-blue-600 px-3 py-1.5 rounded-full flex items-center gap-1 font-semibold shadow-md"><Shield size={12}/> {t('add_listing.identity_req')}</span>
                     </div>
                     <form onSubmit={handleSubmit} className="p-8 space-y-8">
                         {/* Section 1: Localisation */}
                         <div className="space-y-4">
-                            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2 mb-4">1. Localisation & Type</h3>
+                            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2 mb-4">{t('add_listing.section_1')}</h3>
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1">Ville</label>
+                                    <label className="block text-sm font-bold text-slate-700 mb-1">{t('add_listing.city')}</label>
                                     <select name="city" className="w-full p-3 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 outline-none" onChange={handleInputChange} value={formData.city}>
                                         <option value="Rabat">Rabat</option>
                                         <option value="Casablanca">Casablanca</option>
@@ -128,13 +131,13 @@ const AddListing: React.FC = () => {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1">Université proche</label>
+                                    <label className="block text-sm font-bold text-slate-700 mb-1">{t('add_listing.university')}</label>
                                     <select name="university" className="w-full p-3 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 outline-none" onChange={handleInputChange} value={formData.university}>
                                         {UNIVERSITIES.map(u => <option key={u} value={u}>{u}</option>)}
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1">Type de bien</label>
+                                    <label className="block text-sm font-bold text-slate-700 mb-1">{t('add_listing.type')}</label>
                                     <select name="type" className="w-full p-3 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 outline-none" onChange={handleInputChange} value={formData.type}>
                                         <option>Studio</option>
                                         <option>Colocation</option>
@@ -143,7 +146,7 @@ const AddListing: React.FC = () => {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1">Surface (m²)</label>
+                                    <label className="block text-sm font-bold text-slate-700 mb-1">{t('add_listing.surface')}</label>
                                     <input type="number" placeholder="Ex: 45" className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
                                 </div>
                             </div>
@@ -151,25 +154,24 @@ const AddListing: React.FC = () => {
 
                         {/* Section 2: Détails */}
                         <div className="space-y-4">
-                             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2 mb-4">2. Détails & Prix</h3>
+                             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2 mb-4">{t('add_listing.section_2')}</h3>
                              <div className="grid md:grid-cols-2 gap-6">
                                 <div className="md:col-span-2">
-                                    <label className="block text-sm font-bold text-slate-700 mb-1">Titre de l'annonce</label>
+                                    <label className="block text-sm font-bold text-slate-700 mb-1">{t('add_listing.listing_title')}</label>
                                     <input required name="title" type="text" placeholder="Ex: Studio moderne et lumineux proche fac..." className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" onChange={handleInputChange}/>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1">Loyer Mensuel (MAD)</label>
+                                    <label className="block text-sm font-bold text-slate-700 mb-1">{t('add_listing.monthly_rent')}</label>
                                     <div className="relative">
-                                        <input required name="price" type="number" placeholder="2500" className="w-full p-3 border border-slate-300 rounded-lg pl-10 focus:ring-2 focus:ring-blue-500 outline-none" onChange={handleInputChange}/>
-                                        <span className="absolute left-3 top-3.5 text-slate-400 text-sm">DH</span>
+                                        <input required name="price" type="number" placeholder="2500" className="w-full p-3 border border-slate-300 rounded-lg pl-10 rtl:pl-3 rtl:pr-10 focus:ring-2 focus:ring-blue-500 outline-none" onChange={handleInputChange}/>
+                                        <span className="absolute left-3 rtl:left-auto rtl:right-3 top-3.5 text-slate-400 text-sm">DH</span>
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-1">Charges (Eau/Elec)</label>
+                                    <label className="block text-sm font-bold text-slate-700 mb-1">{t('add_listing.charges_label')}</label>
                                     <select className="w-full p-3 border border-slate-300 rounded-lg bg-white">
-                                        <option>Incluses</option>
-                                        <option>Non incluses</option>
-                                        <option>Forfait (ex: 200dh)</option>
+                                        <option>{t('add_listing.charges_included')}</option>
+                                        <option>{t('add_listing.charges_excluded')}</option>
                                     </select>
                                 </div>
                              </div>
@@ -178,12 +180,12 @@ const AddListing: React.FC = () => {
                         {/* Section 3: Description IA AMÉLIORÉE */}
                         <div className="space-y-4">
                             <div className="flex justify-between items-end border-b border-slate-100 pb-2 mb-4">
-                                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">3. Description & Atouts</h3>
+                                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">{t('add_listing.section_3')}</h3>
                             </div>
                             
                             {/* Quick Tags */}
                             <div className="mb-4">
-                                <label className="block text-sm font-bold text-slate-700 mb-2">Sélectionnez les points forts (pour l'IA) :</label>
+                                <label className="block text-sm font-bold text-slate-700 mb-2">{t('add_listing.select_tags')}</label>
                                 <div className="flex flex-wrap gap-2">
                                     {tags.map(tag => (
                                         <button 
@@ -205,30 +207,30 @@ const AddListing: React.FC = () => {
                                     type="button" 
                                     onClick={handleAiGenerate} 
                                     disabled={isGenerating} 
-                                    className="absolute bottom-4 right-4 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full font-bold text-sm shadow-lg flex items-center gap-2 hover:scale-105 transition"
+                                    className="absolute bottom-4 right-4 rtl:right-auto rtl:left-4 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full font-bold text-sm shadow-lg flex items-center gap-2 hover:scale-105 transition"
                                 >
                                     {isGenerating ? <span className="animate-spin">⚡</span> : <Sparkles size={16} />} 
-                                    {isGenerating ? 'Rédaction...' : 'Générer la description'}
+                                    {isGenerating ? t('add_listing.generating') : t('add_listing.generate_desc')}
                                 </button>
                             </div>
                         </div>
                         
                         {/* Section 4: Photos */}
                         <div className="space-y-4">
-                            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2 mb-4">4. Médias</h3>
+                            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2 mb-4">{t('add_listing.section_4')}</h3>
                             <div className="border-2 border-dashed border-blue-200 bg-blue-50 rounded-xl p-8 text-center hover:bg-blue-100 cursor-pointer transition group">
                                 <div className="w-14 h-14 bg-white text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm group-hover:scale-110 transition">
                                     <Camera size={28} />
                                 </div>
-                                <p className="text-base font-bold text-blue-900">Ajouter des photos</p>
-                                <p className="text-xs text-blue-600/70 mt-1">Glissez-déposez ou cliquez pour parcourir</p>
+                                <p className="text-base font-bold text-blue-900">{t('add_listing.add_photos')}</p>
+                                <p className="text-xs text-blue-600/70 mt-1">{t('add_listing.drag_drop')}</p>
                             </div>
                         </div>
 
                         <button type="submit" className="w-full py-4 bg-slate-900 text-white text-lg font-bold rounded-xl hover:bg-slate-800 transition shadow-xl shadow-slate-200 mt-8">
-                            Publier mon annonce
+                            {t('add_listing.publish_btn')}
                         </button>
-                        <p className="text-center text-xs text-slate-400 mt-4">En publiant, vous acceptez les Conditions Générales de Room.ma pour les propriétaires.</p>
+                        <p className="text-center text-xs text-slate-400 mt-4">{t('add_listing.terms')}</p>
                     </form>
                 </div>
             </div>
@@ -245,10 +247,10 @@ const AddListing: React.FC = () => {
                                 <Bot size={24} className="text-white" />
                             </div>
                             <div>
-                                <h3 className="font-bold text-base leading-tight">Assistant Propriétaire</h3>
+                                <h3 className="font-bold text-base leading-tight">{t('add_listing.ai_assistant')}</h3>
                                 <div className="flex items-center gap-1.5 mt-1">
                                     <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                                    <p className="text-xs text-blue-100">IA connectée • Réponse instantanée</p>
+                                    <p className="text-xs text-blue-100">{t('add_listing.ai_online')}</p>
                                 </div>
                             </div>
                         </div>
@@ -257,7 +259,7 @@ const AddListing: React.FC = () => {
                     <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50 custom-scrollbar">
                         {aiChatMessages.map((msg, idx) => (
                             <div key={idx} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`p-3.5 rounded-2xl text-sm max-w-[90%] shadow-sm ${msg.sender === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white border border-slate-200 text-slate-700 rounded-tl-none'}`}>
+                                <div className={`p-3.5 rounded-2xl text-sm max-w-[90%] shadow-sm ${msg.sender === 'user' ? 'bg-blue-600 text-white rounded-tr-none rtl:rounded-tr-2xl rtl:rounded-tl-none' : 'bg-white border border-slate-200 text-slate-700 rounded-tl-none rtl:rounded-tl-2xl rtl:rounded-tr-none'}`}>
                                     {msg.text}
                                 </div>
                             </div>
@@ -267,13 +269,13 @@ const AddListing: React.FC = () => {
                     {/* Quick Actions */}
                     <div className="px-4 py-2 bg-slate-50 flex gap-2 overflow-x-auto no-scrollbar">
                         <button onClick={() => handleAiChatSend("Estimation prix")} className="whitespace-nowrap px-3 py-1.5 bg-white border border-slate-200 rounded-full text-xs text-slate-600 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600 transition flex items-center gap-1">
-                            <DollarSign size={12}/> Prix ?
+                            <DollarSign size={12}/> {t('add_listing.ai_suggestion_price')}
                         </button>
                         <button onClick={() => handleAiChatSend("Conseil photos")} className="whitespace-nowrap px-3 py-1.5 bg-white border border-slate-200 rounded-full text-xs text-slate-600 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600 transition flex items-center gap-1">
-                            <Camera size={12}/> Photos
+                            <Camera size={12}/> {t('add_listing.ai_suggestion_photos')}
                         </button>
                         <button onClick={() => handleAiChatSend("Infos contrat")} className="whitespace-nowrap px-3 py-1.5 bg-white border border-slate-200 rounded-full text-xs text-slate-600 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600 transition flex items-center gap-1">
-                            <FileCheck size={12}/> Contrat
+                            <FileCheck size={12}/> {t('add_listing.ai_suggestion_contract')}
                         </button>
                     </div>
 
@@ -284,7 +286,7 @@ const AddListing: React.FC = () => {
                                 value={aiChatInput}
                                 onChange={(e) => setAiChatInput(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleAiChatSend()}
-                                placeholder="Posez votre question..." 
+                                placeholder={t('add_listing.ai_placeholder')} 
                                 className="flex-1 bg-transparent border-0 px-3 py-2 text-sm outline-none text-slate-800 placeholder:text-slate-400"
                             />
                             <button onClick={() => handleAiChatSend()} className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-sm"><Send size={16}/></button>
@@ -295,20 +297,20 @@ const AddListing: React.FC = () => {
                 {/* Tips Cards */}
                 <div className="bg-indigo-900 rounded-2xl shadow-lg p-6 text-white relative overflow-hidden">
                      <div className="absolute -right-10 -top-10 w-32 h-32 bg-indigo-700 rounded-full opacity-50 blur-2xl"></div>
-                     <h3 className="font-bold mb-4 flex items-center gap-2 relative z-10"><Zap className="text-yellow-400" size={18}/> Boostez votre annonce</h3>
+                     <h3 className="font-bold mb-4 flex items-center gap-2 relative z-10"><Zap className="text-yellow-400" size={18}/> {t('add_listing.boost_title')}</h3>
                      <ul className="space-y-4 relative z-10 text-sm">
                          <li className="flex gap-3 bg-indigo-800/50 p-3 rounded-lg border border-indigo-700">
                              <PenTool className="text-indigo-300 flex-shrink-0 mt-0.5" size={18}/>
                              <div>
-                                 <span className="font-bold block text-indigo-100">Utilisez les tags IA</span>
-                                 <span className="text-indigo-300 text-xs">Cliquez sur les mots-clés pour une description parfaite.</span>
+                                 <span className="font-bold block text-indigo-100">{t('add_listing.boost_tip_1')}</span>
+                                 <span className="text-indigo-300 text-xs">{t('add_listing.boost_desc_1')}</span>
                              </div>
                          </li>
                          <li className="flex gap-3 bg-indigo-800/50 p-3 rounded-lg border border-indigo-700">
                              <Check className="text-green-400 flex-shrink-0 mt-0.5" size={18}/>
                              <div>
-                                 <span className="font-bold block text-indigo-100">Description Complète</span>
-                                 <span className="text-indigo-300 text-xs">Mentionnez le Wifi, l'eau chaude et la distance de la fac.</span>
+                                 <span className="font-bold block text-indigo-100">{t('add_listing.boost_tip_2')}</span>
+                                 <span className="text-indigo-300 text-xs">{t('add_listing.boost_desc_2')}</span>
                              </div>
                          </li>
                      </ul>

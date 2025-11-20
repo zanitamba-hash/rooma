@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShieldCheck, MapPin, CreditCard, ArrowRight, Star, Smartphone, Quote, Users, CheckCircle, ShoppingBag, BookOpen, Search, MessageCircle, Clock } from 'lucide-react';
+import { ShieldCheck, MapPin, CreditCard, ArrowRight, Star, Smartphone, Quote, Users, CheckCircle, ShoppingBag, BookOpen, Search, MessageCircle, Clock, Crown, Gavel, Zap, HeartHandshake, LifeBuoy } from 'lucide-react';
 import { MOCK_LISTINGS, MOCK_REVIEWS, PAYMENT_METHODS } from '../constants';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -190,26 +190,41 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Founder's Message Section - Cleaned for mobile */}
-      <section className="py-16 bg-white relative overflow-hidden border-y border-slate-100">
-         <div className="max-w-4xl mx-auto px-4 relative z-10 text-center">
-            <Quote size={36} className="text-blue-100 mx-auto mb-6 fill-blue-50" />
-            
-            <blockquote className="text-xl md:text-3xl font-medium text-slate-800 leading-relaxed mb-8">
-              {language === 'ar' ? 
-                "\"أسست Room.ma لمساعدة الطلاب على إيجاد سكن آمن وبسعر مناسب بسهولة. مهمتنا بسيطة: صفر احتيال، 100% راحة بال.\"" :
-                "\"J’ai créé RoomMA pour aider les étudiants à trouver facilement un logement sécurisé et abordable. Une mission simple : zéro arnaque, 100% sérénité.\""
-              }
-            </blockquote>
-            
-            <div className="flex flex-col items-center">
-               <div className="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg mb-3 border-4 border-white">
-                  MS
-               </div>
-               <h3 className="text-lg font-bold text-slate-900">Mohamed Sylla</h3>
-               <p className="text-blue-600 font-bold uppercase text-[10px] tracking-widest">Fondateur de Room.ma</p>
-            </div>
-         </div>
+      {/* Founder's Message Section - Premium & Distinct */}
+      <section className="py-20 bg-white relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+              <div className="bg-blue-900 rounded-3xl p-8 md:p-16 text-white relative overflow-hidden shadow-2xl transform hover:scale-[1.01] transition duration-500">
+                  {/* Decor */}
+                  <div className="absolute top-0 left-0 w-32 h-32 bg-blue-500/30 rounded-full blur-3xl -ml-10 -mt-10"></div>
+                  <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl -mr-20 -mb-20"></div>
+                  <Quote className="absolute top-8 left-8 text-blue-400/20 w-24 h-24 transform -scale-x-100" />
+
+                  <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
+                        {/* Avatar */}
+                        <div className="flex-shrink-0">
+                          <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white/20 p-1 relative group">
+                              <div className="w-full h-full rounded-full bg-gradient-to-br from-slate-700 to-slate-900 overflow-hidden shadow-inner flex items-center justify-center">
+                                  <span className="text-3xl font-bold text-white tracking-widest">MS</span>
+                              </div>
+                              <div className="absolute bottom-2 right-2 bg-blue-500 text-white p-2 rounded-full border-4 border-blue-900 shadow-lg">
+                                  <Quote size={16} fill="currentColor"/>
+                              </div>
+                          </div>
+                        </div>
+
+                        {/* Text */}
+                        <div className="text-center md:text-start flex-1">
+                            <h2 className="text-xl md:text-3xl font-medium mb-6 leading-relaxed italic text-blue-50 font-serif">
+                                "{t('founder.quote')}"
+                            </h2>
+                            <div>
+                                <h3 className="text-2xl font-bold text-white mb-1">Mohamed Sylla</h3>
+                                <p className="text-blue-400 font-bold uppercase tracking-widest text-xs">{t('founder.role')}</p>
+                            </div>
+                        </div>
+                  </div>
+              </div>
+          </div>
       </section>
 
       {/* Featured Listings */}
