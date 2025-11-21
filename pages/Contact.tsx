@@ -1,10 +1,12 @@
 
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, MessageCircle, HelpCircle, AlertTriangle, Key, CreditCard, ChevronRight, Send, Clock } from 'lucide-react';
+import { Mail, Phone, MapPin, MessageCircle, HelpCircle, AlertTriangle, Key, CreditCard, ChevronRight, Send, Clock, ArrowLeft } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useNavigate } from 'react-router-dom';
 
 const Contact: React.FC = () => {
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
   // State pour le chat d'assistance rapide
   const [chatMessages, setChatMessages] = useState<{text: string, sender: 'user' | 'bot'}[]>([
     {sender: 'bot', text: 'Bonjour ! Je suis l\'assistant virtuel Room.ma. Comment puis-je vous aider aujourd\'hui ?'}
@@ -39,6 +41,11 @@ const Contact: React.FC = () => {
     <div className="min-h-screen bg-slate-50 py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
+        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors mb-6 font-bold text-sm group">
+           <ArrowLeft size={20} className={`group-hover:-translate-x-1 transition-transform ${language === 'ar' ? 'rotate-180' : ''}`} />
+           {t('details.back')}
+        </button>
+
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-4">{t('contact.title')}</h1>
           <p className="text-slate-600 text-lg max-w-2xl mx-auto">

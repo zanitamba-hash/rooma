@@ -1,12 +1,26 @@
 
 import React, { useState } from 'react';
-import { User, MapPin, Phone, Mail, ShieldCheck, FileText, CreditCard, Home, Settings, LogOut, AlertTriangle, CheckCircle, Search, Activity, TrendingUp, Users, ArrowRight, X, Check } from 'lucide-react';
+import { User, MapPin, Phone, Mail, ShieldCheck, FileText, CreditCard, Home, Settings, LogOut, AlertTriangle, CheckCircle, Search, Activity, TrendingUp, Users, ArrowRight, X, Check, Wallet, Save, Camera, ArrowLeft } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Profile: React.FC = () => {
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
   const [activeRole, setActiveRole] = useState<'tenant' | 'owner'>('tenant');
   
+  // State pour les informations personnelles (Editables)
+  const [isEditing, setIsEditing] = useState(false);
+  const [profileData, setProfileData] = useState({
+      name: "John Doe",
+      location: "Rabat, Maroc",
+      email: "john.doe@example.com",
+      phone: "+212 6 00 11 22 33"
+  });
+
+  // Temp state for editing
+  const [tempData, setTempData] = useState(profileData);
+
   // State pour la vérification locataire
   const [checkEmail, setCheckEmail] = useState('');
   const [checkResult, setCheckResult] = useState<any>(null);
@@ -61,23 +75,88 @@ const Profile: React.FC = () => {
       setRentalApplications(prev => prev.map(app => app.id === id ? { ...app, status: status } : app));
   };
 
+  // Gestion de l'édition du profil
+  const handleEditToggle = () => {
+      if (isEditing) {
+          // Cancel logic
+          setTempData(profileData); 
+          setIsEditing(false);
+      } else {
+          // Start editing
+          setTempData(profileData);
+          setIsEditing(true);
+      }
+  };
+
+  const handleSaveProfile = () => {
+      setProfileData(tempData);
+      setIsEditing(false);
+      // Ici, on ferait un appel API pour sauvegarder
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setTempData({ ...tempData, [e.target.name]: e.target.value });
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
+        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors mb-6 font-bold text-sm group">
+           <ArrowLeft size={20} className={`group-hover:-translate-x-1 transition-transform ${language === 'ar' ? 'rotate-180' : ''}`} />
+           {t('details.back')}
+        </button>
+
         {/* Profile Header */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-8 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-24 bg-slate-900"></div>
+          
           <div className="relative z-10 flex flex-col md:flex-row items-end md:items-center gap-6 mt-8">
-            <div className="w-32 h-32 bg-white p-1 rounded-full shadow-lg">
-              <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white text-4xl font-bold">
-                JD
-              </div>
+            <div className="relative group">
+                <div className="w-32 h-32 bg-white p-1 rounded-full shadow-lg">
+                    <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white text-4xl font-bold overflow-hidden relative">
+                        {isEditing ? (
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center cursor-pointer hover:bg-black/50 transition">
+                                <Camera size={32} className="text-white"/>
+                            </div>
+                        ) : (
+                            "JD"
+                        )}
+                    </div>
+                </div>
             </div>
+            
             <div className="flex-1 pb-2">
-              <h1 className="text-2xl font-bold text-slate-900">John Doe</h1>
-              <p className="text-slate-500 flex items-center gap-2"><MapPin size={16}/> Rabat, Maroc</p>
+              {isEditing ? (
+                  <div className="space-y-2 max-w-md animate-fade-in">
+                      <input 
+                        type="text" 
+                        name="name"
+                        value={tempData.name}
+                        onChange={handleChange}
+                        className="w-full text-2xl font-bold text-slate-900 border-b-2 border-blue-500 outline-none bg-transparent placeholder:text-slate-300"
+                        placeholder="Votre Nom"
+                      />
+                      <div className="flex items-center gap-2 text-slate-500">
+                          <MapPin size={16}/>
+                          <input 
+                            type="text" 
+                            name="location"
+                            value={tempData.location}
+                            onChange={handleChange}
+                            className="text-sm border-b border-slate-300 outline-none bg-transparent"
+                            placeholder="Votre Ville"
+                          />
+                      </div>
+                  </div>
+              ) : (
+                  <div className="animate-fade-in">
+                      <h1 className="text-2xl font-bold text-slate-900">{profileData.name}</h1>
+                      <p className="text-slate-500 flex items-center gap-2"><MapPin size={16}/> {profileData.location}</p>
+                  </div>
+              )}
             </div>
+            
             <div className="flex items-center gap-3 bg-slate-100 p-1 rounded-lg self-start md:self-center">
               <button 
                 onClick={() => setActiveRole('tenant')}
@@ -99,22 +178,67 @@ const Profile: React.FC = () => {
           {/* Left Sidebar: Personal Info */}
           <div className="lg:col-span-1 space-y-6">
             <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-              <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2"><User size={18}/> {t('profile.personal_info')}</h3>
+              <div className="flex justify-between items-center mb-4">
+                 <h3 className="font-bold text-slate-900 flex items-center gap-2"><User size={18}/> {t('profile.personal_info')}</h3>
+                 {isEditing && <span className="text-xs text-blue-600 font-bold animate-pulse">Édition...</span>}
+              </div>
+              
               <ul className="space-y-4 text-sm">
                 <li className="flex items-center gap-3 text-slate-600">
-                  <Mail size={16} className="text-slate-400"/> john.doe@example.com
+                  <Mail size={16} className="text-slate-400 flex-shrink-0"/> 
+                  {isEditing ? (
+                      <input 
+                        type="email" 
+                        name="email"
+                        value={tempData.email}
+                        onChange={handleChange}
+                        className="w-full border-b border-slate-300 outline-none bg-transparent"
+                      />
+                  ) : profileData.email}
                 </li>
                 <li className="flex items-center gap-3 text-slate-600" dir="ltr">
-                  <Phone size={16} className="text-slate-400"/> +212 6 00 11 22 33
+                  <Phone size={16} className="text-slate-400 flex-shrink-0"/> 
+                  {isEditing ? (
+                      <input 
+                        type="text" 
+                        name="phone"
+                        value={tempData.phone}
+                        onChange={handleChange}
+                        className="w-full border-b border-slate-300 outline-none bg-transparent"
+                      />
+                  ) : profileData.phone}
                 </li>
                 <li className="flex items-center gap-3 text-slate-600">
-                  <ShieldCheck size={16} className="text-green-500"/> {t('profile.verified_id')}
+                  <ShieldCheck size={16} className="text-green-500 flex-shrink-0"/> {t('profile.verified_id')}
                 </li>
               </ul>
-              <button className="w-full mt-6 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition flex items-center justify-center gap-2">
-                <Settings size={16}/> {t('profile.edit_profile')}
-              </button>
+
+              <div className="mt-6 pt-4 border-t border-slate-100">
+                  {isEditing ? (
+                      <div className="flex gap-2">
+                          <button onClick={handleSaveProfile} className="flex-1 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2">
+                              <Save size={16}/> Enregistrer
+                          </button>
+                          <button onClick={handleEditToggle} className="px-3 py-2 bg-slate-100 text-slate-600 rounded-lg text-sm font-bold hover:bg-slate-200 transition">
+                              <X size={18}/>
+                          </button>
+                      </div>
+                  ) : (
+                      <button onClick={handleEditToggle} className="w-full py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition flex items-center justify-center gap-2">
+                        <Settings size={16}/> {t('profile.edit_profile')}
+                      </button>
+                  )}
+              </div>
             </div>
+            
+            {/* Link to Payments */}
+            <Link to="/payments" className="block bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition group">
+                <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-bold text-slate-900 flex items-center gap-2"><Wallet size={18} className="text-blue-600"/> {t('profile.my_payments')}</h3>
+                    <ArrowRight size={16} className="text-slate-400 group-hover:translate-x-1 transition"/>
+                </div>
+                <p className="text-xs text-slate-500">Gérer le solde séquestré et factures</p>
+            </Link>
             
             <div className="bg-red-50 rounded-xl p-6 border border-red-100">
                <button className="w-full py-2 text-red-600 font-bold text-sm flex items-center justify-center gap-2 hover:bg-red-100 rounded-lg transition">

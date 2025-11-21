@@ -27,19 +27,29 @@ export interface Listing {
   reviews?: Review[]; // Les avis spécifiques à ce logement
 }
 
+export interface TicketData {
+  id: string;
+  title: string;
+  category: 'maintenance' | 'admin' | 'security' | 'wifi' | 'cleaning';
+  status: 'open' | 'in_progress' | 'resolved';
+  priority: 'low' | 'medium' | 'high';
+  eta?: string;
+}
+
 export interface ChatMessage {
   id: string;
   sender: 'user' | 'other';
   text: string;
   timestamp: Date;
   isSystem?: boolean; // For safety tips
+  ticket?: TicketData; // Nouveau champ pour les tickets structurés
 }
 
 export interface Conversation {
   id: string;
   name: string;
   avatar?: string;
-  type: 'ai' | 'support' | 'owner';
+  type: 'ai' | 'support' | 'owner' | 'concierge';
   lastMessage: string;
   unread: number;
   isOnline?: boolean;

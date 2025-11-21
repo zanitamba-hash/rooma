@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
@@ -12,12 +13,21 @@ import Contracts from './pages/Contracts';
 import Colocation from './pages/Colocation';
 import Profile from './pages/Profile';
 import Forum from './pages/Forum';
+import Marketplace from './pages/Marketplace';
+import Community from './pages/Community';
 import Blog from './pages/Blog';
+import Payments from './pages/Payments';
+import FindHousingChoice from './pages/FindHousingChoice';
 import { MessageSquare } from 'lucide-react';
 
 // Wrapper component to handle conditional rendering based on route
 const AppContent: React.FC = () => {
   const location = useLocation();
+  
+  // Scroll to top whenever location changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   
   // Logic: Hide Footer on Messages (for chat UI) AND Listings (for infinite scroll/cleaner UI as requested)
   const isMessagesPage = location.pathname === '/messages';
@@ -37,16 +47,20 @@ const AppContent: React.FC = () => {
       <main className={`flex-grow ${isMessagesPage ? 'h-[calc(100vh-64px)] overflow-hidden' : ''}`}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/find" element={<FindHousingChoice />} />
           <Route path="/listings" element={<Listings />} />
           <Route path="/colocation" element={<Colocation />} />
           <Route path="/contracts" element={<Contracts />} />
+          <Route path="/community" element={<Community />} />
           <Route path="/forum" element={<Forum />} />
+          <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/listing/:id" element={<ListingDetails />} />
           <Route path="/add-room" element={<AddListing />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/payments" element={<Payments />} />
         </Routes>
       </main>
       

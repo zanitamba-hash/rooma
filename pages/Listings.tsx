@@ -1,13 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { Filter, Search, MapPin, ShieldCheck, Star, Armchair, Utensils, Bath, X, SlidersHorizontal, GraduationCap } from 'lucide-react';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import { Filter, Search, MapPin, ShieldCheck, Star, Armchair, Utensils, Bath, X, SlidersHorizontal, GraduationCap, ArrowLeft } from 'lucide-react';
 import { MOCK_LISTINGS, UNIVERSITIES } from '../constants';
 import { Listing } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 
 const Listings: React.FC = () => {
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   
   // Initialiser la recherche avec le paramètre d'URL 'city' si présent
@@ -199,6 +200,11 @@ const Listings: React.FC = () => {
     <div className="min-h-screen bg-slate-50 pt-6 pb-20 lg:pt-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
+        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors mb-6 font-bold text-sm group">
+          <ArrowLeft size={20} className={`group-hover:-translate-x-1 transition-transform ${language === 'ar' ? 'rotate-180' : ''}`} />
+          {t('details.back')}
+        </button>
+
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
             <div>
                 <h1 className="text-3xl font-bold text-slate-900 tracking-tight">{t('listings.title')}</h1>

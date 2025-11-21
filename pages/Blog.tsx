@@ -1,9 +1,13 @@
 
 import React, { useState } from 'react';
-import { BookOpen, Clock, Calendar, ArrowRight, Search, Tag, Globe, Scale, HeartHandshake, Home, User, GraduationCap } from 'lucide-react';
+import { BookOpen, Clock, Calendar, ArrowRight, Search, Tag, Globe, Scale, HeartHandshake, Home, User, GraduationCap, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 const Blog: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('Tous');
+  const navigate = useNavigate();
+  const { t, language } = useLanguage();
 
   const categories = ["Tous", "Intégration & Culture", "Démarches Administratives", "Vie Étudiante", "Conseils Bailleurs"];
 
@@ -93,6 +97,11 @@ const Blog: React.FC = () => {
          {/* Image d'architecture marocaine en background */}
          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1539020140153-e479b8c22e70?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-20"></div>
          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 to-slate-900"></div>
+         
+         <button onClick={() => navigate(-1)} className="absolute top-24 left-4 md:left-8 z-20 text-white/80 hover:text-white flex items-center gap-2 font-bold transition hover:-translate-x-1">
+             <ArrowLeft size={20} className={language === 'ar' ? 'rotate-180' : ''} /> {t('details.back')}
+         </button>
+
          <div className="max-w-7xl mx-auto px-4 relative z-10 text-center">
             <div className="inline-block p-3 bg-blue-600 rounded-full mb-6 animate-bounce">
                <BookOpen size={32} className="text-white"/>

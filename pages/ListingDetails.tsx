@@ -30,9 +30,9 @@ const ListingDetails: React.FC = () => {
 
   // --- NOUVEAU : États pour le flux de réservation (Paiement CMI & Physique) ---
   const [showReservationModal, setShowReservationModal] = useState(false);
-  // summary -> redirecting -> cmi_secure -> processing_auth -> success (online)
+  // summary -> card_input -> redirecting -> cmi_secure -> processing_auth -> success (online)
   // summary -> success (physical)
-  const [paymentStep, setPaymentStep] = useState<'summary' | 'redirecting' | 'cmi_secure' | 'processing_auth' | 'success'>('summary');
+  const [paymentStep, setPaymentStep] = useState<'summary' | 'card_input' | 'redirecting' | 'cmi_secure' | 'processing_auth' | 'success'>('summary');
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'online' | 'physical'>('online');
 
   // --- NOUVEAU : Galerie Interactive ---
@@ -114,11 +114,17 @@ const ListingDetails: React.FC = () => {
       if (selectedPaymentMethod === 'physical') {
           setPaymentStep('success');
       } else {
-          setPaymentStep('redirecting');
-          setTimeout(() => {
-              setPaymentStep('cmi_secure');
-          }, 2000);
+          setPaymentStep('card_input');
       }
+  };
+  
+  // Validation de la carte et redirection CMI
+  const handleCardSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      setPaymentStep('redirecting');
+      setTimeout(() => {
+          setPaymentStep('cmi_secure');
+      }, 2000);
   };
 
   // Étape 3 : Simulation Validation 3D Secure
@@ -509,10 +515,13 @@ const ListingDetails: React.FC = () => {
                         </p>
                     </div>
                     
-                    {/* NO COMMISSION WARNING */}
+                    {/* NO COMMISSION WARNING - RED & BOLD */}
                     <div className="mt-4 p-3 bg-red-50 border border-red-100 rounded-lg flex gap-2 items-start">
-                         <AlertTriangle size={16} className="text-red-600 flex-shrink-0 mt-0.5"/>
-                         <p className="text-xs text-red-700 font-medium leading-snug">{t('details.no_commission')}</p>
+                         <AlertTriangle size={20} className="text-red-600 flex-shrink-0 mt-0.5"/>
+                         <div>
+                            <p className="text-xs text-red-700 font-bold uppercase mb-1">Zéro Commission</p>
+                            <p className="text-xs text-red-600 leading-snug">{t('details.no_commission')}</p>
+                         </div>
                     </div>
                 </div>
                 
@@ -567,7 +576,7 @@ const ListingDetails: React.FC = () => {
                           ) : paymentStep === 'success' ? (
                               <span className="text-green-600 flex items-center gap-2"><CheckCircle size={20}/> Réservation Confirmée</span>
                           ) : (
-                              <span className="flex items-center gap-2"><ShieldCheck size={20} className="text-blue-600"/> Récapitulatif</span>
+                              <span className="flex items-center gap-2"><ShieldCheck size={20} className="text-blue-600"/> {t('details.select_payment')}</span>
                           )}
                       </h3>
                       {paymentStep !== 'success' && paymentStep !== 'processing_auth' && (
@@ -606,12 +615,11 @@ const ListingDetails: React.FC = () => {
                                               {selectedPaymentMethod === 'online' && <Check size={12} className="text-white"/>}
                                           </div>
                                           <div className="flex-1">
-                                              <div className="flex justify-between">
+                                              <div className="flex flex-wrap gap-2 items-center mb-1">
                                                   <span className="font-bold text-sm text-slate-900">{t('details.online_payment')}</span>
-                                                  <Globe size={16} className="text-blue-500"/>
+                                                  <span className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1"><Globe size={10}/> Recommended</span>
                                               </div>
-                                              <p className="text-xs text-slate-500 mt-1 leading-snug">{t('details.online_desc')}</p>
-                                              <span className="inline-block mt-2 text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded font-bold border border-green-200">100% Sécurisé</span>
+                                              <p className="text-xs text-slate-500 leading-snug">{t('details.online_desc')}</p>
                                           </div>
                                       </div>
 
@@ -629,6 +637,7 @@ const ListingDetails: React.FC = () => {
                                                  <Eye size={16} className="text-slate-400"/>
                                               </div>
                                               <p className="text-xs text-slate-500 mt-1">{t('details.physical_desc')}</p>
+                                              <p className="text--[10px] text-red-500 font-bold mt-1 flex items-center gap-1"><AlertTriangle size={10}/> 0% COMMISSION</p>
                                           </div>
                                       </div>
                                   </div>
@@ -665,6 +674,52 @@ const ListingDetails: React.FC = () => {
                                       <Lock size={10}/> Transaction chiffrée SSL 256-bit via CMI
                                   </p>
                               )}
+                          </div>
+                      )}
+
+                      {/* ETAPE 1.5: SAISIE CARTE (NOUVEAU) */}
+                      {paymentStep === 'card_input' && (
+                          <div className="p-6">
+                               <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 flex items-start gap-3">
+                                   <ShieldCheck size={24} className="text-blue-600 flex-shrink-0 mt-1"/>
+                                   <div>
+                                       <p className="text-sm font-bold text-blue-900">Paiement Sécurisé</p>
+                                       <p className="text-xs text-blue-700">Vos coordonnées bancaires sont chiffrées et ne sont jamais stockées par Room.ma.</p>
+                                   </div>
+                               </div>
+
+                               <form onSubmit={handleCardSubmit} className="space-y-4">
+                                   <div>
+                                       <label className="block text-xs font-bold text-slate-500 mb-1 text-transform uppercase">{t('payments.card_number')}</label>
+                                       <div className="relative">
+                                            <input type="text" placeholder="0000 0000 0000 0000" className="w-full p-3 border border-slate-300 rounded-xl font-mono focus:ring-2 focus:ring-blue-500 outline-none" required />
+                                            <CreditCard className="absolute right-3 top-3 text-slate-400" size={20}/>
+                                       </div>
+                                   </div>
+                                   <div className="grid grid-cols-2 gap-4">
+                                       <div>
+                                           <label className="block text-xs font-bold text-slate-500 mb-1 text-transform uppercase">{t('payments.expiry')}</label>
+                                           <input type="text" placeholder="MM/YY" className="w-full p-3 border border-slate-300 rounded-xl font-mono focus:ring-2 focus:ring-blue-500 outline-none" required />
+                                       </div>
+                                       <div>
+                                           <label className="block text-xs font-bold text-slate-500 mb-1 text-transform uppercase">{t('payments.cvc')}</label>
+                                           <input type="text" placeholder="123" className="w-full p-3 border border-slate-300 rounded-xl font-mono focus:ring-2 focus:ring-blue-500 outline-none" required />
+                                       </div>
+                                   </div>
+                                   <div>
+                                       <label className="block text-xs font-bold text-slate-500 mb-1 text-transform uppercase">{t('payments.holder')}</label>
+                                       <input type="text" placeholder="NOM PRENOM" className="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" required />
+                                   </div>
+
+                                   <button type="submit" className="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition shadow-lg mt-6 flex items-center justify-center gap-2">
+                                       <Lock size={18}/> {t('payments.pay_btn')} {finalTotal} MAD
+                                   </button>
+                               </form>
+                               <div className="mt-6 flex justify-center gap-4 grayscale opacity-50">
+                                   <span className="text-xs font-bold italic">Visa</span>
+                                   <span className="text-xs font-bold italic">Mastercard</span>
+                                   <span className="text-xs font-bold italic">CMI</span>
+                               </div>
                           </div>
                       )}
 
@@ -753,8 +808,8 @@ const ListingDetails: React.FC = () => {
                               
                               {selectedPaymentMethod === 'online' ? (
                                   <p className="text-slate-600 mb-8">
-                                      Votre réservation est confirmée. Les fonds ont été séquestrés avec succès.<br/>
-                                      Le propriétaire a été notifié.
+                                      Votre logement est sécurisé.<br/>
+                                      Le propriétaire a été notifié et vos fonds sont séquestrés.
                                   </p>
                               ) : (
                                   <p className="text-slate-600 mb-8">

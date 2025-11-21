@@ -1,15 +1,22 @@
 
 import React from 'react';
-import { FileText, Download, PenTool, ShieldCheck, AlertCircle, CheckCircle2, Scale, Lock, BookOpen, Stamp } from 'lucide-react';
+import { FileText, Download, PenTool, ShieldCheck, AlertCircle, CheckCircle2, Scale, Lock, BookOpen, Stamp, ArrowLeft } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useNavigate } from 'react-router-dom';
 
 const Contracts: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-slate-50 py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
+        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors mb-6 font-bold text-sm group">
+           <ArrowLeft size={20} className={`group-hover:-translate-x-1 transition-transform ${language === 'ar' ? 'rotate-180' : ''}`} />
+           {t('details.back')}
+        </button>
+
         <div className="text-center mb-16">
           <div className="inline-block p-3 bg-blue-100 text-blue-600 rounded-full mb-4">
              <Scale size={32} />

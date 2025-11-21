@@ -1,11 +1,13 @@
 
 import React, { useState } from 'react';
-import { Upload, Check, Shield, Sparkles, Info, AlertCircle, Bot, Send, Key, Camera, DollarSign, FileCheck, Zap, CheckSquare, PenTool } from 'lucide-react';
+import { Upload, Check, Shield, Sparkles, Info, AlertCircle, Bot, Send, Key, Camera, DollarSign, FileCheck, Zap, CheckSquare, PenTool, ArrowLeft } from 'lucide-react';
 import { UNIVERSITIES } from '../constants';
 import { useLanguage } from '../context/LanguageContext';
+import { useNavigate } from 'react-router-dom';
 
 const AddListing: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const navigate = useNavigate();
   const [submitted, setSubmitted] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   
@@ -79,7 +81,7 @@ const AddListing: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
-    setTimeout(() => window.location.href = '/', 3000);
+    setTimeout(() => navigate('/'), 3000);
   };
 
   if (submitted) {
@@ -97,6 +99,11 @@ const AddListing: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 py-8">
       <div className="max-w-7xl mx-auto px-4">
+        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors mb-6 font-bold text-sm group">
+          <ArrowLeft size={20} className={`group-hover:-translate-x-1 transition-transform ${language === 'ar' ? 'rotate-180' : ''}`} />
+          {t('details.back')}
+        </button>
+
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-2"><Key className="text-blue-600"/> {t('add_listing.title')}</h1>
