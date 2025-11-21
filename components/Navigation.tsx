@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Search, MessageSquare, Menu, X, Key, UserCircle, HeartHandshake, Scale, Users, LogIn, ChevronRight, ChevronDown, Building, MapPin, Sparkles, LayoutGrid } from 'lucide-react';
+import { Home, Search, MessageSquare, Menu, X, Key, UserCircle, HeartHandshake, Scale, Users, LogIn, ChevronRight, ChevronDown, Building, MapPin, Sparkles, LayoutGrid, Shield } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 const Navigation: React.FC = () => {
@@ -65,13 +65,15 @@ const Navigation: React.FC = () => {
                  {t('nav.find')}
               </Link>
 
+              {/* Concierge Link (NEW) */}
+              <Link to="/concierge" className={`px-4 py-2.5 rounded-full transition-all duration-300 relative flex items-center gap-2 ${location.pathname === '/concierge' ? 'text-yellow-600 font-bold bg-yellow-50/60' : 'text-slate-600 hover:text-yellow-600 hover:bg-yellow-50/30'}`}>
+                 <Shield size={16} className="text-yellow-500"/>
+                 Conciergerie
+              </Link>
+
               {/* Community Link */}
               <Link to="/community" className={`px-4 py-2.5 rounded-full transition-all duration-300 relative group ${isCommunityActive ? 'text-blue-600 font-bold bg-blue-50/60 shadow-sm' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50/80'}`}>
                  {t('nav.community')}
-              </Link>
-
-              <Link to="/contracts" className={`px-4 py-2.5 rounded-full transition-all duration-300 relative group flex items-center gap-2 ${isActive('/contracts')}`}>
-                 <Scale size={16} className="text-slate-400 group-hover:text-blue-500 transition-colors"/> {t('nav.contracts')}
               </Link>
               
               <div className="h-8 w-px bg-slate-200 mx-3"></div>
@@ -154,6 +156,12 @@ const Navigation: React.FC = () => {
                     <Link to="/find" className={mobileLinkClass} onClick={() => setIsOpen(false)}>
                       <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm"><Search size={20}/></div> 
                       <span className="flex-1 font-bold">{t('nav.find')}</span>
+                      <ChevronRight size={16} className="text-slate-300"/>
+                    </Link>
+
+                    <Link to="/concierge" className={mobileLinkClass} onClick={() => setIsOpen(false)}>
+                      <div className="w-10 h-10 rounded-xl bg-yellow-50 flex items-center justify-center text-yellow-600 shadow-sm"><Shield size={20}/></div> 
+                      <span className="flex-1 font-bold text-yellow-700">Conciergerie VIP</span>
                       <ChevronRight size={16} className="text-slate-300"/>
                     </Link>
 

@@ -18,33 +18,30 @@ import Community from './pages/Community';
 import Blog from './pages/Blog';
 import Payments from './pages/Payments';
 import FindHousingChoice from './pages/FindHousingChoice';
+import Concierge from './pages/Concierge';
+import AdminDashboard from './pages/AdminDashboard'; // Import Admin Page
 import { MessageSquare } from 'lucide-react';
 
-// Wrapper component to handle conditional rendering based on route
 const AppContent: React.FC = () => {
   const location = useLocation();
   
-  // Scroll to top whenever location changes
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
   
-  // Logic: Hide Footer on Messages (for chat UI) AND Listings (for infinite scroll/cleaner UI as requested)
+  // Logic: Hide Footer on Messages and Admin
   const isMessagesPage = location.pathname === '/messages';
-  const isListingsPage = location.pathname === '/listings' || location.pathname === '/colocation';
+  const isAdminPage = location.pathname === '/admin';
   
-  const shouldHideFooter = isMessagesPage || isListingsPage;
-  const shouldHideFloatingBtn = isMessagesPage;
+  const shouldHideFooter = isMessagesPage || isAdminPage;
+  const shouldHideFloatingBtn = isMessagesPage || isAdminPage;
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 font-sans text-slate-900">
-      <Navigation />
+      {!isAdminPage && <Navigation />}
       
-      {/* 
-          On Messages page: Use specific height logic.
-          On Listings page: Just standard flex grow, but footer is hidden so it takes full bottom space.
-      */}
-      <main className={`flex-grow ${isMessagesPage ? 'h-[calc(100vh-64px)] overflow-hidden' : ''}`}>
+      {/* Use flex-grow to push footer down */}
+      <main className={`flex-grow w-full flex flex-col ${isMessagesPage ? 'h-[calc(100vh-80px)] overflow-hidden' : ''}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/find" element={<FindHousingChoice />} />
@@ -61,13 +58,17 @@ const AppContent: React.FC = () => {
           <Route path="/messages" element={<Messages />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/payments" element={<Payments />} />
+          <Route path="/concierge" element={<Concierge />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </main>
       
-      {/* Only show Footer if NOT on messages OR listings page */}
-      {!shouldHideFooter && <Footer />}
+      {!shouldHideFooter && (
+        <div className="mt-auto">
+          <Footer />
+        </div>
+      )}
       
-      {/* Floating Chat Button (AI/Support Shortcut) */}
       {!shouldHideFloatingBtn && (
         <Link to="/messages" className="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all duration-300 z-50 group">
            <MessageSquare size={28} />

@@ -16,15 +16,15 @@ const Messages: React.FC = () => {
   const [callStatus, setCallStatus] = useState<'calling' | 'connected'>('calling');
   const [isMicOn, setIsMicOn] = useState(true);
   const [isCamOn, setIsCamOn] = useState(true);
-  const [showServiceMenu, setShowServiceMenu] = useState(false); // Pour le menu d'actions rapides Concierge
+  const [showServiceMenu, setShowServiceMenu] = useState(false); 
 
   const [isTyping, setIsTyping] = useState(false);
   const [reportReason, setReportReason] = useState('');
 
   // Conversation Data
   const [conversations, setConversations] = useState<Conversation[]>([
-    { id: 'concierge_daily', name: 'Room.ma Gestion', type: 'concierge', lastMessage: 'Ticket #4022 : Plombier assigné.', unread: 1, isOnline: true },
-    { id: 'support', name: 'Support & Sécurité', type: 'support', lastMessage: 'Bienvenue au centre d\'aide.', unread: 0, isOnline: true },
+    { id: 'concierge_daily', name: 'Concierge VIP', type: 'concierge', lastMessage: 'Urgence: Fuite signalée', unread: 0, isOnline: true },
+    { id: 'support', name: 'Service Client Humain', type: 'support', lastMessage: 'Bienvenue au centre d\'aide.', unread: 0, isOnline: true },
     { id: 'ai', name: 'Assistant Recherche', type: 'ai', lastMessage: 'Prêt à chercher votre logement ?', unread: 0, isOnline: true },
     { id: 'owner1', name: 'Karim B. (Propriétaire)', type: 'owner', lastMessage: 'D\'accord pour la visite demain à 14h.', unread: 0, isOnline: false },
   ]);
@@ -34,42 +34,13 @@ const Messages: React.FC = () => {
 
   const [messages, setMessages] = useState<Record<string, ChatMessage[]>>({
     'concierge_daily': [
-       { id: 'c1', sender: 'other', text: '👋 Bonjour Mr Doe.\n\nJe suis Yassir, votre gestionnaire dédié Room.ma.\nJe suis là pour gérer votre quotidien (Maintenance, Loyer, Syndic).', timestamp: new Date(Date.now() - 86400000) },
-       { 
-         id: 'c2', 
-         sender: 'other', 
-         text: 'Votre demande de quittance a été traitée.', 
-         timestamp: new Date(Date.now() - 4000000),
-         isSystem: true,
-         ticket: {
-             id: '4021',
-             title: 'Quittance de Loyer - Octobre',
-             category: 'admin',
-             status: 'resolved',
-             priority: 'low',
-             eta: 'Disponible'
-         }
-       },
-       {
-         id: 'c3',
-         sender: 'other',
-         text: 'Le plombier est en route pour votre fuite.',
-         timestamp: new Date(),
-         ticket: {
-             id: '4022',
-             title: 'Fuite lavabo SDB',
-             category: 'maintenance',
-             status: 'in_progress',
-             priority: 'high',
-             eta: 'Arrivée : 14h30'
-         }
-       }
+       { id: 'c1', sender: 'other', text: '🚨 **URGENCE & GESTION UNIQUEMENT**\n\nBienvenue sur le canal prioritaire Conciergerie.\n\nCe canal est strictement réservé pour :\n1. Signaler un problème grave dans l\'appartement (Fuite, Sécurité, Panne).\n2. Demander une intervention technique.\n3. Souscrire au service de gestion si vous êtes intéressé.\n\nPour toute autre demande, merci d\'utiliser le support classique.', timestamp: new Date(Date.now() - 86400000) }
     ],
     'ai': [
        { id: '1', sender: 'other', text: 'Bonjour ! 🏠 Je suis l\'intelligence artificielle de Room.ma.\n\nJe suis là pour filtrer les milliers d\'offres pour vous. Cliquez sur une option ci-dessous pour commencer ! 👇', timestamp: new Date() }
     ],
     'support': [
-       { id: '1', sender: 'other', text: '👋 Bonjour. Je suis l\'agent de liaison du Support Room.ma.\n\nNous intervenons pour :\n1️⃣ Les litiges de paiement\n2️⃣ La validation des contrats\n3️⃣ Les signalements de sécurité.', timestamp: new Date(Date.now() - 86400000) }
+       { id: '1', sender: 'other', text: '👋 Bonjour. Je suis l\'agent de liaison du Service Client Humain.\n\nNous intervenons pour :\n1️⃣ Les litiges de paiement\n2️⃣ La validation des contrats\n3️⃣ Les signalements de sécurité.', timestamp: new Date(Date.now() - 86400000) }
     ],
     'owner1': [
        { id: '1', sender: 'user', text: 'Bonjour, le studio est-il toujours disponible ?', timestamp: new Date(Date.now() - 10000000) },
@@ -91,10 +62,7 @@ const Messages: React.FC = () => {
     if (location.state) {
       const { contactId, contactName, initialMessage } = location.state as any;
       if (contactId && contactName) {
-        const existingConv = conversations.find(c => c.id === contactId);
-        if (!existingConv) {
-            // Logic to add conv
-        }
+        // Logic to switch or add conv would go here
         setActiveConversationId(contactId);
         if (initialMessage) setInput(initialMessage);
         window.history.replaceState({}, document.title);
@@ -105,8 +73,11 @@ const Messages: React.FC = () => {
   const activeConversation = conversations.find(c => c.id === activeConversationId);
   const activeMessages = messages[activeConversationId] || [];
 
+  // QUICK REPLIES SPECIFIQUES CONCIERGERIE
+  const conciergeChips = ["🚨 SIGNALER UN PROBLÈME", "🛠️ Demande d'intervention", "💼 Je veux que vous gériez mon bien", "🔑 Problème Clés/Accès"];
+
   const getQuickReplies = (type: string | undefined, step: number = 0) => {
-    if (!type || type === 'concierge') return [];
+    if (!type) return [];
     switch (type) {
         case 'ai':
             if (step === 0) return ["Chercher un logement 🏠", "Comment ça marche ?"];
@@ -117,6 +88,8 @@ const Messages: React.FC = () => {
             return ["⚠️ Signaler un abus", "⚖️ Litige / Paiement", "📄 Vérification Contrat"];
         case 'owner':
             return ["Est-ce disponible ?", "Organiser une visite", "Photos supplémentaires ?"];
+        case 'concierge':
+            return conciergeChips;
         default:
             return [];
     }
@@ -157,7 +130,7 @@ const Messages: React.FC = () => {
       const userMsg: ChatMessage = {
           id: Date.now().toString(),
           sender: 'user',
-          text: `Demande de service : ${title}`,
+          text: `⚠️ SIGNALEMENT : ${title}`,
           timestamp: new Date()
       };
       
@@ -174,7 +147,7 @@ const Messages: React.FC = () => {
           const ticketMsg: ChatMessage = {
               id: (Date.now() + 1).toString(),
               sender: 'other',
-              text: `Ticket #${ticketId} créé avec succès.`,
+              text: `Ticket d'urgence #${ticketId} créé. Notre équipe technique intervient sous 4h.`,
               timestamp: new Date(),
               isSystem: true,
               ticket: {
@@ -182,8 +155,8 @@ const Messages: React.FC = () => {
                   title: title,
                   category: category,
                   status: 'open',
-                  priority: 'medium',
-                  eta: 'En attente d\'assignation'
+                  priority: 'high',
+                  eta: 'Technicien notifié'
               }
           };
           setMessages(prev => ({
@@ -191,15 +164,24 @@ const Messages: React.FC = () => {
               'concierge_daily': [...prev['concierge_daily'], ticketMsg]
           }));
           setIsTyping(false);
-      }, 1000);
+      }, 1500);
   };
 
   const handleConciergeResponse = (userInput: string) => {
     setTimeout(() => {
+        let responseText = "";
+        if (userInput.includes("gériez mon bien") || userInput.includes("intéressé")) {
+             responseText = "Merci de votre intérêt. Un expert va vous contacter pour mettre en place la gestion de votre appartement. Pouvez-vous confirmer votre numéro de téléphone ?";
+        } else if (userInput.includes("PROBLÈME") || userInput.includes("intervention")) {
+             responseText = "Quel est la nature exacte du problème ? (Fuite, Électricité, Voisinage...). Vous pouvez utiliser le menu '+' pour créer un ticket officiel.";
+        } else {
+             responseText = "Ce canal est réservé aux urgences et à la gestion locative. Pour toute autre question, merci de contacter le support.";
+        }
+
         const humanMsg: ChatMessage = {
             id: Date.now().toString(),
             sender: 'other',
-            text: "Bien reçu. Je traite votre demande immédiatement.",
+            text: responseText,
             timestamp: new Date()
         };
         setMessages(prev => ({ ...prev, ['concierge_daily']: [...prev['concierge_daily'], humanMsg] }));
@@ -271,15 +253,6 @@ const Messages: React.FC = () => {
       }
   };
 
-  const getTicketStatusColor = (status: string) => {
-      switch(status) {
-          case 'open': return 'bg-blue-100 text-blue-700 border-blue-200';
-          case 'in_progress': return 'bg-orange-100 text-orange-700 border-orange-200';
-          case 'resolved': return 'bg-green-100 text-green-700 border-green-200';
-          default: return 'bg-slate-100 text-slate-700';
-      }
-  };
-
   const renderConversationItem = (conv: Conversation) => (
     <div 
         key={conv.id}
@@ -306,7 +279,7 @@ const Messages: React.FC = () => {
                 {conv.unread > 0 && <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">{conv.unread}</span>}
             </div>
             <p className={`text-xs truncate ${activeConversationId === conv.id ? 'text-slate-500 font-medium' : 'text-slate-400'}`}>
-                {conv.type === 'concierge' ? <span className="text-yellow-600 font-bold flex items-center gap-1">Ticket mis à jour</span> : conv.lastMessage}
+                {conv.type === 'concierge' ? <span className="text-yellow-600 font-bold flex items-center gap-1">Gestion Active</span> : conv.lastMessage}
             </p>
         </div>
     </div>
@@ -356,24 +329,13 @@ const Messages: React.FC = () => {
              <div>
                  <h2 className={`font-bold text-lg flex items-center gap-2 ${activeConversation?.type === 'concierge' ? 'text-white' : 'text-slate-900'}`}>
                     {activeConversation?.name}
-                    {activeConversation?.type === 'concierge' && <span className="bg-yellow-400 text-slate-900 text-[10px] px-2 py-0.5 rounded font-bold uppercase flex items-center gap-1"><Shield size={10}/> ELITE</span>}
+                    {activeConversation?.type === 'concierge' && <span className="bg-yellow-400 text-slate-900 text-[10px] px-2 py-0.5 rounded font-bold uppercase flex items-center gap-1"><Shield size={10}/> VIP</span>}
                  </h2>
                  <p className={`text-xs flex items-center gap-1.5 ${activeConversation?.type === 'concierge' ? 'text-slate-400' : 'text-green-600'}`}>
                     <span className={`w-2 h-2 rounded-full ${activeConversation?.type === 'concierge' ? 'bg-green-500' : 'bg-green-500'}`}></span> 
                     {activeConversation?.type === 'concierge' ? 'Yassir (Gestionnaire Principal)' : 'En ligne'}
                  </p>
              </div>
-          </div>
-          
-          <div className="flex items-center gap-3">
-             {activeConversation?.type === 'owner' && (
-                <button onClick={startVideoCall} className="p-2.5 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition" title="Appel Vidéo">
-                    <Video size={20} />
-                </button>
-             )}
-             <button onClick={() => setShowReportModal(true)} className={`p-2.5 rounded-full transition ${activeConversation?.type === 'concierge' ? 'text-slate-400 hover:bg-slate-800' : 'text-slate-400 hover:bg-slate-100'}`} title="Options">
-                <MoreVertical size={20} />
-             </button>
           </div>
         </div>
 
@@ -388,18 +350,16 @@ const Messages: React.FC = () => {
 
                 {/* Welcome Banner for Concierge */}
                 {activeConversation?.type === 'concierge' && (
-                    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white mb-8 shadow-xl relative overflow-hidden border border-slate-700 mx-auto max-w-2xl">
+                    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white mb-8 shadow-xl relative overflow-hidden border border-slate-700 mx-auto max-w-2xl text-center">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
-                        <div className="flex items-start gap-5 relative z-10">
-                            <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-yellow-400 border border-white/10 shadow-inner">
-                                <Shield size={28} />
+                        <div className="relative z-10">
+                            <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center text-yellow-400 border border-white/10 shadow-inner mx-auto mb-4">
+                                <Shield size={32} />
                             </div>
-                            <div>
-                                <h3 className="font-bold text-xl mb-2">Conciergerie Premium</h3>
-                                <p className="text-slate-300 text-sm leading-relaxed">
-                                    Bienvenue dans votre espace VIP. Je suis Yassir, votre gestionnaire personnel. Utilisez le bouton <strong>(+)</strong> pour créer un ticket (Plomberie, Ménage, Administratif) ou écrivez-moi directement.
-                                </p>
-                            </div>
+                            <h3 className="font-bold text-xl mb-2">Gestion Sécurisée VIP</h3>
+                            <p className="text-slate-300 text-sm leading-relaxed max-w-md mx-auto">
+                                Ce canal est strictement réservé aux signalements d'urgence (fuites, sécurité) et à l'aide à la gestion de votre bien.
+                            </p>
                         </div>
                     </div>
                 )}
@@ -421,24 +381,12 @@ const Messages: React.FC = () => {
                                                 <h4 className="font-bold text-slate-900 text-sm">{msg.ticket.title}</h4>
                                             </div>
                                         </div>
-                                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${getTicketStatusColor(msg.ticket.status)}`}>
-                                            {msg.ticket.status === 'in_progress' ? 'En cours' : msg.ticket.status === 'resolved' ? 'Résolu' : 'Ouvert'}
+                                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${msg.ticket.status === 'open' ? 'bg-red-100 text-red-700 border-red-200' : 'bg-slate-100'}`}>
+                                            {msg.ticket.status === 'open' ? 'Urgence' : 'Traité'}
                                         </span>
                                     </div>
-                                    
-                                    <div className="bg-slate-50 rounded-xl p-3 mb-4 text-xs space-y-2 border border-slate-100">
-                                        <div className="flex justify-between">
-                                            <span className="text-slate-500">Priorité</span>
-                                            <span className={`font-bold capitalize ${msg.ticket.priority === 'high' ? 'text-red-600' : 'text-slate-700'}`}>{msg.ticket.priority}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-slate-500">Estimé</span>
-                                            <span className="font-bold text-slate-900">{msg.ticket.eta || 'En attente'}</span>
-                                        </div>
-                                    </div>
-
                                     <button className="w-full py-2.5 bg-white border border-slate-200 text-slate-700 font-bold text-xs rounded-lg hover:bg-slate-50 hover:text-blue-600 transition shadow-sm">
-                                        Voir les détails
+                                        Voir le suivi
                                     </button>
                                 </div>
                             </div>
@@ -489,7 +437,7 @@ const Messages: React.FC = () => {
                             </div>
                             <div>
                                <p className="font-bold text-slate-900">Yassir M.</p>
-                               <p className="text-xs text-slate-500">Réponse &lt; 15 min</p>
+                               <p className="text-xs text-slate-500">Réponse &lt; 5 min</p>
                             </div>
                         </div>
                     </div>
@@ -499,38 +447,18 @@ const Messages: React.FC = () => {
                         <div className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl p-5 text-white mb-8 shadow-lg relative overflow-hidden">
                              <div className="absolute top-0 right-0 w-20 h-20 bg-white/20 rounded-full blur-xl -mr-5 -mt-5"></div>
                              <div className="flex justify-between items-start mb-4">
-                                 <h3 className="font-bold text-sm">Abonnement Elite</h3>
+                                 <h3 className="font-bold text-sm">Garantie Active</h3>
                                  <ShieldCheck size={18} className="text-white/80"/>
                              </div>
-                             <p className="text-2xl font-bold mb-1">Actif</p>
-                             <p className="text-xs text-white/80 mb-4">Expire le 12 Oct 2025</p>
-                             <button className="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-xs font-bold transition backdrop-blur-sm">
-                                 Gérer l'abonnement
-                             </button>
+                             <p className="text-2xl font-bold mb-1">Pack VIP</p>
+                             <p className="text-xs text-white/80 mb-4">Protection Totale</p>
                         </div>
 
-                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Tickets Actifs</h3>
+                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Interventions en cours</h3>
                         <div className="space-y-3 mb-8">
-                             <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-sm flex gap-3 items-center hover:shadow-md transition cursor-pointer">
-                                 <div className="p-2 bg-orange-50 rounded-lg text-orange-600"><Wrench size={16}/></div>
-                                 <div className="flex-1 min-w-0">
-                                     <p className="font-bold text-xs text-slate-900 truncate">Fuite lavabo SDB</p>
-                                     <p className="text-[10px] text-orange-600 font-medium">Intervention 14h30</p>
-                                 </div>
-                                 <ChevronRight size={14} className="text-slate-300"/>
+                             <div className="text-center text-xs text-slate-400 py-4 italic border border-dashed border-slate-200 rounded-xl">
+                                 Aucun problème signalé.
                              </div>
-                        </div>
-
-                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
-                            <h3 className="text-xs font-bold text-slate-900 mb-3">Prochaine Échéance</h3>
-                            <div className="flex justify-between items-center mb-1">
-                                <span className="text-xs text-slate-500">Loyer Nov.</span>
-                                <span className="font-bold text-slate-900 text-sm">3500 DH</span>
-                            </div>
-                            <div className="w-full bg-slate-200 rounded-full h-1.5 mt-2">
-                                <div className="bg-blue-600 h-1.5 rounded-full w-[70%]"></div>
-                            </div>
-                            <p className="text-[10px] text-slate-400 mt-1 text-right">J-12</p>
                         </div>
                     </div>
                 </div>
@@ -541,23 +469,23 @@ const Messages: React.FC = () => {
         {showServiceMenu && (
             <div className="absolute bottom-24 left-4 md:left-auto md:right-[340px] z-50 animate-scale-in origin-bottom-left">
                 <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 w-72">
-                    <h3 className="text-xs font-bold text-slate-400 uppercase mb-3 px-2">Créer un ticket</h3>
+                    <h3 className="text-xs font-bold text-slate-400 uppercase mb-3 px-2">Signaler une urgence</h3>
                     <div className="grid grid-cols-2 gap-2">
-                        <button onClick={() => handleCreateTicket('maintenance', 'Plomberie / Élec')} className="flex flex-col items-center p-3 hover:bg-slate-50 rounded-xl transition group">
-                            <div className="w-10 h-10 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition"><Hammer size={18}/></div>
+                        <button onClick={() => handleCreateTicket('maintenance', 'Fuite / Plomberie')} className="flex flex-col items-center p-3 hover:bg-red-50 rounded-xl transition group border border-slate-100 hover:border-red-100">
+                            <div className="w-10 h-10 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition"><Hammer size={18}/></div>
                             <span className="text-xs font-bold text-slate-700">Réparation</span>
                         </button>
-                        <button onClick={() => handleCreateTicket('cleaning', 'Ménage complet')} className="flex flex-col items-center p-3 hover:bg-slate-50 rounded-xl transition group">
-                            <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition"><Zap size={18}/></div>
-                            <span className="text-xs font-bold text-slate-700">Ménage</span>
+                        <button onClick={() => handleCreateTicket('security', 'Problème Clés')} className="flex flex-col items-center p-3 hover:bg-orange-50 rounded-xl transition group border border-slate-100 hover:border-orange-100">
+                            <div className="w-10 h-10 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition"><Key size={18}/></div>
+                            <span className="text-xs font-bold text-slate-700">Accès / Clés</span>
                         </button>
-                        <button onClick={() => handleCreateTicket('admin', 'Papiers / Quittance')} className="flex flex-col items-center p-3 hover:bg-slate-50 rounded-xl transition group">
-                            <div className="w-10 h-10 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition"><FileText size={18}/></div>
-                            <span className="text-xs font-bold text-slate-700">Admin</span>
+                        <button onClick={() => handleCreateTicket('admin', 'Problème Voisinage')} className="flex flex-col items-center p-3 hover:bg-blue-50 rounded-xl transition group border border-slate-100 hover:border-blue-100">
+                            <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition"><FileText size={18}/></div>
+                            <span className="text-xs font-bold text-slate-700">Voisinage</span>
                         </button>
-                        <button onClick={() => handleCreateTicket('wifi', 'Problème Internet')} className="flex flex-col items-center p-3 hover:bg-slate-50 rounded-xl transition group">
-                            <div className="w-10 h-10 bg-green-50 text-green-600 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition"><Wifi size={18}/></div>
-                            <span className="text-xs font-bold text-slate-700">Wifi</span>
+                        <button onClick={() => handleCreateTicket('wifi', 'Autre Urgence')} className="flex flex-col items-center p-3 hover:bg-slate-50 rounded-xl transition group border border-slate-100">
+                            <div className="w-10 h-10 bg-gray-100 text-gray-600 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition"><AlertTriangle size={18}/></div>
+                            <span className="text-xs font-bold text-slate-700">Autre</span>
                         </button>
                     </div>
                 </div>
@@ -567,23 +495,25 @@ const Messages: React.FC = () => {
         {/* INPUT AREA */}
         <div className="bg-white border-t border-slate-100 p-6 pb-8 relative z-20">
            
-           {/* Chips for Non-Concierge */}
-           {activeConversation?.type !== 'concierge' && (
-               <div className="flex gap-2 overflow-x-auto pb-3 mb-2 no-scrollbar">
-                  {getQuickReplies(activeConversation?.type, activeConversation?.type === 'ai' ? aiStep : 0).map((reply, i) => (
-                      <button key={i} onClick={() => handleSendMessage(reply)} className="px-4 py-2 text-xs font-bold rounded-full bg-slate-50 text-slate-600 border border-slate-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition whitespace-nowrap">
-                          {reply}
-                      </button>
-                  ))}
-               </div>
-           )}
+           {/* FLUID CONCIERGE CHIPS */}
+           <div className="flex gap-2 overflow-x-auto pb-3 mb-2 no-scrollbar">
+              {getQuickReplies(activeConversation?.type, activeConversation?.type === 'ai' ? aiStep : 0).map((reply, i) => (
+                  <button 
+                    key={i} 
+                    onClick={() => handleSendMessage(reply)} 
+                    className={`px-4 py-2 text-xs font-bold rounded-full border transition whitespace-nowrap ${activeConversation?.type === 'concierge' ? 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-blue-50 hover:text-blue-600'}`}
+                  >
+                      {reply}
+                  </button>
+              ))}
+           </div>
            
            <div className="flex items-end gap-3 bg-slate-50 p-2 rounded-[24px] border border-slate-200 focus-within:ring-2 focus-within:ring-blue-100 focus-within:border-blue-300 transition-all shadow-inner">
               
               {activeConversation?.type === 'concierge' ? (
                   <button 
                     onClick={() => setShowServiceMenu(!showServiceMenu)}
-                    className={`p-3 rounded-full transition shadow-sm transform hover:scale-105 ${showServiceMenu ? 'bg-slate-900 text-white rotate-45' : 'bg-yellow-400 text-slate-900 hover:bg-yellow-500'}`}
+                    className={`p-3 rounded-full transition shadow-sm transform hover:scale-105 ${showServiceMenu ? 'bg-slate-900 text-white rotate-45' : 'bg-red-600 text-white hover:bg-red-700'}`}
                   >
                       <Plus size={20} strokeWidth={3}/>
                   </button>
@@ -600,7 +530,7 @@ const Messages: React.FC = () => {
                         handleSendMessage();
                     }
                 }}
-                placeholder={activeConversation?.type === 'concierge' ? "Demandez un service ou posez une question..." : "Écrivez votre message..."}
+                placeholder={activeConversation?.type === 'concierge' ? "Décrivez l'urgence..." : "Écrivez votre message..."}
                 className="flex-1 bg-transparent outline-none text-sm text-slate-700 resize-none py-3 max-h-32 placeholder:text-slate-400"
                 rows={1}
               />
@@ -613,24 +543,9 @@ const Messages: React.FC = () => {
               </button>
            </div>
         </div>
-        
-        {/* VIDEO CALL OVERLAY */}
-        {isVideoCallActive && (
-            <div className="absolute inset-0 z-50 bg-slate-900 flex flex-col animate-fade-in">
-                <div className="flex-1 relative">
-                     <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80" className="w-full h-full object-cover opacity-40 blur-sm" />
-                     <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                         <div className="w-32 h-32 rounded-full border-4 border-white/20 p-1 mb-6 relative">
-                             <div className="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-2xl animate-pulse">
-                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80" className="w-full h-full object-cover"/>
-                             </div>
-                         </div>
-                         <h2 className="text-3xl font-bold mb-2">{activeConversation?.name}</h2>
-                         <p className="text-blue-300 font-medium bg-blue-900/30 px-4 py-1 rounded-full backdrop-blur-md border border-blue-500/30">
-                            {callStatus === 'calling' ? 'Appel en cours...' : 'Connecté (00:12)'}
-                         </p>
-                     </div>
-                </div>
-                
-                <div className="h-32 bg-slate-900/80 backdrop-blur-xl border-t border-white/10 flex items-center justify-center gap-8">
-                    <button onClick={() => setIsMicOn(!isMicOn)} className={`p
+      </div>
+    </div>
+  );
+};
+
+export default Messages;

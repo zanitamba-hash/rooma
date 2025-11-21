@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Users, MapPin, Coffee, Wifi, BookOpen, Sparkles, Music, Home, Filter, MessageSquare, UserPlus, Zap, Utensils, ArrowRight, X, CheckCircle, ArrowLeft } from 'lucide-react';
+import { Users, MapPin, Coffee, Wifi, BookOpen, Sparkles, Music, Home, Filter, MessageSquare, UserPlus, Zap, Utensils, ArrowRight, X, CheckCircle, ArrowLeft, Heart } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 // Interface pour Offre Coloc (Appartement)
@@ -17,6 +17,7 @@ interface ColocListing {
     gender: 'Girls' | 'Boys' | 'Mixed';
     spotsLeft: number;
     amenities: string[];
+    matchScore: number; // Ajout visuel pour "gamifier"
 }
 
 // MOCK DATA: OFFRES COLOC (CHAMBRES)
@@ -32,7 +33,8 @@ const APARTMENT_DATA: ColocListing[] = [
         amenities: ['Netflix', 'Ménage inclus', 'Jardin'],
         roommates: [{name: "Sarah", avatarColor: "bg-pink-500"}, {name: "Ahmed", avatarColor: "bg-blue-500"}],
         gender: 'Mixed',
-        spotsLeft: 1
+        spotsLeft: 1,
+        matchScore: 94
     },
     {
         id: 202, 
@@ -45,7 +47,8 @@ const APARTMENT_DATA: ColocListing[] = [
         amenities: ['Fibre Optique', 'Bureau individuel'],
         roommates: [{name: "Youssef", avatarColor: "bg-indigo-500"}, {name: "Omar", avatarColor: "bg-slate-500"}],
         gender: 'Boys',
-        spotsLeft: 2
+        spotsLeft: 2,
+        matchScore: 88
     }
 ];
 
@@ -77,20 +80,17 @@ const Colocation: React.FC = () => {
   };
 
   const handlePublishAd = () => {
-      // Redirect to add-room but specifically for Colocation type
       navigate('/add-room');
   };
 
   // --- MATCHER LOGIC ---
   const handleQuizSelection = (key: string, value: string | string[]) => {
-      // Logic to store pref
       if (quizStep < 4) {
           setQuizStep(quizStep + 1);
       } else {
           // Finish Quiz
           setHasMatched(true);
           setShowMatcher(false);
-          // In a real app, we would fetch filtered apartments here
       }
   };
 
@@ -173,15 +173,16 @@ const Colocation: React.FC = () => {
          {viewMode === 'need_room' && (
              <div className="animate-slide-up">
                 
-                {/* MATCHER CTA */}
-                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl shadow-xl p-8 md:p-10 text-white mb-12 flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div>
+                {/* MATCHER CTA - Amélioré */}
+                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl shadow-xl p-8 md:p-10 text-white mb-12 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                    <div className="relative z-10">
                         <h2 className="text-3xl font-bold mb-2 flex items-center gap-3"><Sparkles className="text-yellow-300"/> {t('coloc_page.matcher_title')}</h2>
                         <p className="text-indigo-100 text-lg max-w-xl">{t('coloc_page.matcher_desc')}</p>
                     </div>
                     <button 
                         onClick={() => setShowMatcher(true)}
-                        className="px-8 py-4 bg-white text-indigo-600 font-bold rounded-xl shadow-lg hover:scale-105 transition flex items-center gap-2 whitespace-nowrap"
+                        className="px-8 py-4 bg-white text-indigo-600 font-bold rounded-xl shadow-lg hover:scale-105 transition flex items-center gap-2 whitespace-nowrap relative z-10"
                     >
                         <Zap size={20}/> {t('coloc_page.btn_matcher')}
                     </button>
@@ -206,10 +207,10 @@ const Colocation: React.FC = () => {
                     ))}
                 </div>
 
-                {/* LISTINGS GRID */}
+                {/* LISTINGS GRID - SANS AVIS */}
                 <div className="grid md:grid-cols-3 gap-8">
                     {filteredApartments.map((listing) => (
-                        <div key={listing.id} className="group bg-white rounded-3xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+                        <div key={listing.id} className="group bg-white rounded-3xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full relative">
                             <div className="relative h-64 overflow-hidden">
                                 <img src={listing.image} alt={listing.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-700"/>
                                 <div className="absolute bottom-3 left-3 flex gap-2">
@@ -233,22 +234,35 @@ const Colocation: React.FC = () => {
                                     <MapPin size={14}/> {listing.city} • {listing.university}
                                 </p>
 
+                                {/* MATCH SCORE VISUAL INSTEAD OF REVIEWS */}
+                                <div className="mb-6 bg-indigo-50 rounded-xl p-3 flex items-center gap-3 border border-indigo-100">
+                                     <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-indigo-600 font-bold text-sm">
+                                         {listing.matchScore}%
+                                     </div>
+                                     <div>
+                                         <p className="text-xs font-bold text-indigo-900">Vibe Match</p>
+                                         <div className="w-24 h-1.5 bg-indigo-200 rounded-full mt-1 overflow-hidden">
+                                             <div className="h-full bg-indigo-500 rounded-full" style={{width: `${listing.matchScore}%`}}></div>
+                                         </div>
+                                     </div>
+                                </div>
+
                                 <div className="mt-auto">
                                     <p className="text-xs font-bold text-slate-400 uppercase mb-3">{t('coloc_page.current_roommates')}</p>
                                     <div className="flex items-center justify-between">
                                         <div className="flex -space-x-2">
                                             {listing.roommates.map((rm, i) => (
-                                                <div key={i} className={`w-10 h-10 rounded-full border-2 border-white ${rm.avatarColor} flex items-center justify-center text-white text-xs font-bold shadow-sm`}>
+                                                <div key={i} className={`w-10 h-10 rounded-full border-2 border-white ${rm.avatarColor} flex items-center justify-center text-white text-xs font-bold shadow-sm ring-2 ring-slate-50`}>
                                                     {rm.name.charAt(0)}
                                                 </div>
                                             ))}
-                                            <div className="w-10 h-10 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-bold">
+                                            <div className="w-10 h-10 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-bold ring-2 ring-slate-50">
                                                 +
                                             </div>
                                         </div>
                                         <button 
                                             onClick={() => handleContactRoom(listing)}
-                                            className="px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition flex items-center gap-2"
+                                            className="px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition flex items-center gap-2 shadow-lg"
                                         >
                                             <MessageSquare size={16} /> {t('coloc_page.apply_btn')}
                                         </button>

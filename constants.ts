@@ -2,59 +2,97 @@
 import { Listing, Review } from './types';
 
 export const MOCK_REVIEWS: Review[] = [
+  // --- ÉTUDIANTS ---
   {
     id: 1,
-    author: "Mamadou D.",
+    author: "Sarah",
     role: "Étudiant",
-    text: "Grâce à Room.ma, j'ai trouvé mon logement à Rabat depuis le Sénégal sans arnaque. Le processus est super sécurisé.",
+    text: "Grâce à RoomMA, j’ai réservé ma chambre depuis la France sans stress. Tout était prêt à mon arrivée, appartement vérifié et sécurisé. Une arrivée clé en main !",
     rating: 5,
     isVerified: true,
-    date: "Il y a 2 mois"
+    date: "Il y a 2 jours"
   },
   {
     id: 2,
-    author: "Sophie M.",
+    author: "Youssef",
     role: "Étudiant",
-    text: "L'interface est claire et les propriétaires sont vérifiés. Je recommande pour tous les étudiants en échange.",
+    text: "Je craignais les arnaques, mais RoomMA a tout sécurisé : logement vérifié, compte bloqué jusqu’à la remise des clés. Je recommande à tous les étudiants étrangers.",
     rating: 5,
     isVerified: true,
-    date: "Il y a 1 mois"
-  },
-  {
-    id: 3,
-    author: "Hassan E.",
-    role: "Propriétaire",
-    text: "Je loue mes appartements uniquement via cette plateforme maintenant. Les paiements sont garantis et les locataires vérifiés.",
-    rating: 4,
-    isVerified: true,
-    date: "Il y a 3 semaines"
-  },
-  {
-    id: 4,
-    author: "Lucas P.",
-    role: "Étudiant",
-    text: "Génial pour trouver une colocation fiable. J'ai pu parler avec mes futurs colocs avant d'arriver !",
-    rating: 5,
-    isVerified: false,
     date: "Il y a 1 semaine"
   },
   {
-    id: 5,
-    author: "Fatima Z.",
-    role: "Propriétaire",
-    text: "L'outil de vérification des étudiants est un vrai plus. Fini les impayés, je suis rassurée.",
+    id: 3,
+    author: "Lina",
+    role: "Étudiant",
+    text: "Trouver un logement n’a jamais été aussi simple : RoomMA m’a mis en relation avec des propriétaires fiables et des appartements proches de la fac.",
+    rating: 5,
+    isVerified: true,
+    date: "Il y a 3 jours"
+  },
+  {
+    id: 4,
+    author: "Fatima",
+    role: "Étudiant",
+    text: "Le service client est incroyable : toujours disponible et attentif. Je me suis installée sereinement, comme si j’avais un ami sur place.",
     rating: 5,
     isVerified: true,
     date: "Hier"
   },
   {
+    id: 5,
+    author: "Amine",
+    role: "Étudiant",
+    text: "RoomMA a transformé ma recherche de logement. Tout est digitalisé, sécurisé et transparent. Je recommande à tous les nouveaux étudiants.",
+    rating: 4,
+    isVerified: true,
+    date: "Il y a 2 semaines"
+  },
+  // --- PROPRIÉTAIRES ---
+  {
     id: 6,
-    author: "Mehdi O.",
+    author: "M. Benali",
     role: "Propriétaire",
-    text: "Service client très réactif pour la légalisation des contrats. Une charge mentale en moins.",
+    text: "RoomMA m’a permis de recevoir uniquement des étudiants fiables et vérifiés. Plus de soucis de paiement ou de logements mal utilisés.",
     rating: 5,
     isVerified: true,
     date: "Aujourd'hui"
+  },
+  {
+    id: 7,
+    author: "Mme El Amrani",
+    role: "Propriétaire",
+    text: "Les étudiants sont bien sélectionnés, leur identité est vérifiée. RoomMA m’apporte une vraie tranquillité d’esprit pour la gestion de mes biens.",
+    rating: 5,
+    isVerified: true,
+    date: "Il y a 4 jours"
+  },
+  {
+    id: 8,
+    author: "M. Haddad",
+    role: "Propriétaire",
+    text: "Transparence totale : chaque étudiant est contrôlé, les paiements sécurisés via la plateforme. Je sais que mon logement est entre de bonnes mains.",
+    rating: 5,
+    isVerified: true,
+    date: "Il y a 1 semaine"
+  },
+  {
+    id: 9,
+    author: "Mme Rachidi",
+    role: "Propriétaire",
+    text: "RoomMA a simplifié ma vie de bailleur : gestion fluide, locataires sérieux, et une vraie relation de confiance avec l'équipe support.",
+    rating: 5,
+    isVerified: true,
+    date: "Il y a 3 semaines"
+  },
+  {
+    id: 10,
+    author: "M. Ouardi",
+    role: "Propriétaire",
+    text: "Depuis que j’utilise RoomMA, je n’ai plus d’inquiétudes. Les étudiants sont vérifiés, la plateforme est fiable, et le service client est réactif.",
+    rating: 5,
+    isVerified: true,
+    date: "Il y a 1 mois"
   }
 ];
 

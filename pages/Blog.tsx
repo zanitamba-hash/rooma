@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { BookOpen, Clock, Calendar, ArrowRight, Search, Tag, Globe, Scale, HeartHandshake, Home, User, GraduationCap, ArrowLeft } from 'lucide-react';
+import { BookOpen, Clock, Calendar, ArrowRight, Search, Tag, Globe, Scale, HeartHandshake, Home, User, GraduationCap, ArrowLeft, Megaphone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -127,6 +127,23 @@ const Blog: React.FC = () => {
                   {cat}
                </button>
             ))}
+         </div>
+
+         {/* Ad Banner */}
+         <div className="mb-12 bg-yellow-400 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+            <div className="relative z-10 flex items-center gap-4">
+                <div className="bg-white p-3 rounded-full shadow-sm">
+                    <Megaphone size={24} className="text-slate-900"/>
+                </div>
+                <div>
+                    <h3 className="font-black text-xl text-slate-900">Devenez Partenaire Room.ma</h3>
+                    <p className="text-slate-800 font-medium">Touchez plus de 50 000 étudiants chaque mois.</p>
+                </div>
+            </div>
+            <button className="relative z-10 px-6 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition shadow-lg whitespace-nowrap">
+                Contactez la régie
+            </button>
          </div>
 
          {/* Featured Post (Only on 'Tous') */}

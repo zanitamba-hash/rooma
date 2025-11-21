@@ -152,8 +152,6 @@ const Community: React.FC = () => {
             <div className="flex gap-8 animate-marquee whitespace-nowrap text-white font-bold text-sm items-center justify-center">
                 <span className="flex items-center gap-2"><Sparkles size={14} className="text-yellow-400"/> Sarah a vendu "Livre Droit" (Rabat)</span>
                 <span className="text-slate-600">•</span>
-                <span className="flex items-center gap-2"><MessageCircle size={14} className="text-blue-400"/> Karim a répondu à "Visa Espagne"</span>
-                <span className="text-slate-600">•</span>
                 <span className="flex items-center gap-2"><HeartHandshake size={14} className="text-pink-400"/> Nouvelle colocation formée à Casa !</span>
                 <span className="text-slate-600">•</span>
                 <span className="flex items-center gap-2"><Zap size={14} className="text-purple-400"/> Offre Flash : iPhone 11 à 2000DH</span>
